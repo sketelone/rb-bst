@@ -11,14 +11,49 @@ const Tree = (array) => {
         return TreeRoot;
     }
 
-    const insert = (value) => {
+    const insert = (value, inputNode) => {
     //function that inserts the given value into the tree
-        
-        return;
+        let node = inputNode || TreeRoot;
+        if (TreeArray.includes(value)) {
+            console.log("this number is already in the tree")
+            return false;
+        } else
+        if (value < node.data) {
+            if (node.left == null) {
+                node.left = Node(value)
+            } else {
+                insert(value, node.left);
+            }
+        } else {
+            if (node.right == null) {
+                node.right = Node(value)
+            } else {
+                insert(value, node.right);
+            }
+        }    
     }
 
     const remove = (value) => {
 
+    }
+
+    const find = (value, inputNode) => {
+    //function that finds the given value and returns the node 
+    //NEED TO FIX
+        let node = inputNode || TreeRoot;
+        let foundNode = {};
+        if (node.data == value) {
+            foundNode = node;
+            return node;
+        } else {
+            if (node.left !== null) {
+                node = find(value, node.left);
+            }
+            if (foundNode == {} && node.right !== null) {
+                node = find(value, node.right);
+            }
+        }
+        return foundNode;
     }
 
     const preorder = (inputNode, inputNodes) => {
@@ -76,29 +111,22 @@ const Tree = (array) => {
         }
     }
 
-    const toString = (node) => {
-    //returns nodes as a string
-        let string = "";
-        string = string.concat(`( ${node.data} ) -> `)
-        return string;
-    }
-
     function buildTree(array) {
     //builds tree structure by recursively starting in the middle of the sorted 
     //array and setting adjacent elements to the right and left
-        let rootIndex = Math.floor(array.length/2);
-        let rootNode = MyNode(array[rootIndex]);
-        let right = [];
-        let left = [];
-        if (array.length == 1) {
+        let index = Math.floor(array.length/2);
+        let node = Node(array[index]);
+        if (array.length == 0) {
             return null;
+        } else if (array.length == 1) {
+            return node;
         } else {
-            right = array.slice(rootIndex, array.length);
-            left = array.slice(0,rootIndex);
-            rootNode.left = buildTree(left, rootNode.left)
-            rootNode.right = buildTree(right, rootNode.right)
+            var right = array.slice(index+1, array.length);
+            var left = array.slice(0,index);
+            node.left = buildTree(left)
+            node.right = buildTree(right)
         }
-        return rootNode; 
+        return node; 
     }
     
     function removeDupes(array) {
@@ -137,11 +165,11 @@ const Tree = (array) => {
         return less.concat(greater);
     }
 
-    return {root, prettyPrint, preorder, inorder, postorder}
+    return {root, prettyPrint, insert, remove, find, preorder, inorder, postorder}
 }
 
 //create Node class
-const MyNode = (value, nodeRight, nodeLeft) => {
+const Node = (value, nodeRight, nodeLeft) => {
     const data = value || null;
     const right = nodeRight || null;
     const left = nodeLeft || null;
@@ -150,14 +178,25 @@ const MyNode = (value, nodeRight, nodeLeft) => {
 }
 
 // let test = [9,5,6,6,99,2,2,9]
-let test = [4,1,3,2,6,5,7,7,7]
+let test = [7,7,4,5,3,6,7,7,1,2]
 const myTree = Tree(test);
 
 // console.log(quickSort(test));
 // console.log(removeDupes(test));
 console.log(myTree.root());
 // let rootNode = myTree.root();
+myTree.insert(10);
 myTree.prettyPrint()
-console.log(myTree.preorder())
-console.log(myTree.inorder())
-console.log(myTree.postorder())
+myTree.insert(8);
+myTree.prettyPrint()
+myTree.insert(1);
+myTree.prettyPrint()
+myTree.insert(3);
+myTree.prettyPrint()
+myTree.insert(2);
+myTree.prettyPrint()
+
+// console.log(myTree.preorder())
+// console.log(myTree.inorder())
+// console.log(myTree.postorder())
+// console.log(myTree.find(5))
