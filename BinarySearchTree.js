@@ -5,16 +5,67 @@ const Tree = (array) => {
     let TreeRoot = {};
 
     const root = () => {
+    //cleans array and calls buildTree to build array, returns root node
         TreeArray = quickSort(removeDupes(array));
         TreeRoot = buildTree(TreeArray);
-        // console.log(TreeArray, TreeRoot)
-        // console.log(TreeRoot.left, TreeRoot.right)
-        // console.log(TreeRoot.left.left, TreeRoot.left.right)
-        // console.log(TreeRoot.right.left, TreeRoot.right.left)
         return TreeRoot;
     }
 
+    const insert = (value) => {
+    //function that inserts the given value into the tree
+        
+        return;
+    }
+
+    const remove = (value) => {
+
+    }
+
+    const preorder = (inputNode, inputNodes) => {
+    //traverses and prints tree in root, left, right order
+    //TD: could probably be optimized
+        let node = inputNode || TreeRoot;
+        let nodes = inputNodes || [];
+        nodes.push(node.data);
+        if (node.left !== null) {
+            preorder(node.left, nodes);
+        }
+        if (node.right !== null) {
+            preorder(node.right, nodes);
+        }
+        return nodes;
+    }
+
+    const inorder = (inputNode, inputNodes) => {
+    //traverses and prints tree in left, root, right order
+        let node = inputNode || TreeRoot;
+        let nodes = inputNodes || [];
+        if (node.left !== null) {
+            inorder(node.left, nodes);
+        }
+        nodes.push(node.data);
+        if (node.right !== null) {
+            inorder(node.right, nodes);
+        }
+        return nodes;
+    }
+
+    const postorder = (inputNode, inputNodes) => {
+        //traverses and prints tree in left, right, root order
+            let node = inputNode || TreeRoot;
+            let nodes = inputNodes || [];
+            if (node.left !== null) {
+                postorder(node.left, nodes);
+            }
+            if (node.right !== null) {
+                postorder(node.right, nodes);
+            }
+            nodes.push(node.data);
+            return nodes;
+        }
+
     const prettyPrint = (inputNode, prefix = '', isLeft = true) => {
+    //prints a diagram of the binary tree in the console
         let node = inputNode || TreeRoot;
         if (node.right !== null) {
           prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
@@ -25,36 +76,33 @@ const Tree = (array) => {
         }
     }
 
+    const toString = (node) => {
+    //returns nodes as a string
+        let string = "";
+        string = string.concat(`( ${node.data} ) -> `)
+        return string;
+    }
+
     function buildTree(array) {
+    //builds tree structure by recursively starting in the middle of the sorted 
+    //array and setting adjacent elements to the right and left
         let rootIndex = Math.floor(array.length/2);
-        // console.log(rootIndex)
         let rootNode = MyNode(array[rootIndex]);
         let right = [];
         let left = [];
         if (array.length == 1) {
-            return MyNode(array[0]);
+            return null;
         } else {
             right = array.slice(rootIndex, array.length);
             left = array.slice(0,rootIndex);
-
-            // array.forEach(elem => {
-            //     if (elem > rootNode) {
-            //         right = array.slice(0, )
-            //         rootNode.right = Node(elem)
-            //     } else {
-            //         rootNode.left = Node(elem)
-            //     }
-            // })
-            // console.log(right, left)
             rootNode.left = buildTree(left, rootNode.left)
             rootNode.right = buildTree(right, rootNode.right)
-            // console.log(rootNode, rootNode.right, rootNode.left)
         }
         return rootNode; 
     }
     
-
     function removeDupes(array) {
+    //removes duplicates in the array
         let temp = [];
         while (array.length > 0) {
             if (temp.includes(array[0])) {
@@ -67,6 +115,9 @@ const Tree = (array) => {
     }
 
     function quickSort(array) {
+    //sorts the array by recursively selecting a random pivot element, 
+    //splitting the array into two subarrays of greater and lesser values
+    //w.r.t. the pivot, and concatenating the subarrays
         let pivot = array[Math.floor(array.length*Math.random())];
         let less = [];
         let greater = [];
@@ -86,7 +137,7 @@ const Tree = (array) => {
         return less.concat(greater);
     }
 
-    return {root, prettyPrint}
+    return {root, prettyPrint, preorder, inorder, postorder}
 }
 
 //create Node class
@@ -99,12 +150,14 @@ const MyNode = (value, nodeRight, nodeLeft) => {
 }
 
 // let test = [9,5,6,6,99,2,2,9]
-// let test = [4,1,3,2,6,5,7,7,7]
+let test = [4,1,3,2,6,5,7,7,7]
 const myTree = Tree(test);
 
 // console.log(quickSort(test));
 // console.log(removeDupes(test));
 console.log(myTree.root());
-
-myTree.prettyPrint();
-
+// let rootNode = myTree.root();
+myTree.prettyPrint()
+console.log(myTree.preorder())
+console.log(myTree.inorder())
+console.log(myTree.postorder())
