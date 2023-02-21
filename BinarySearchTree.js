@@ -1,13 +1,15 @@
 
 //create Tree class
 const Tree = (array) => {
-    let TreeArray = [];
-    let TreeRoot = {};
+    // let TreeArray = [];
+    // let TreeRoot = {};
+    let TreeArray = quickSort(removeDupes(array));
+    let TreeRoot = buildTree(TreeArray);
 
     const root = () => {
     //cleans array and calls buildTree to build array, returns root node
-        TreeArray = quickSort(removeDupes(array));
-        TreeRoot = buildTree(TreeArray);
+        // TreeArray = quickSort(removeDupes(array));
+        // TreeRoot = buildTree(TreeArray);
         return TreeRoot;
     }
 
@@ -17,8 +19,7 @@ const Tree = (array) => {
         if (TreeArray.includes(value)) {
             console.log("this number is already in the tree")
             return false;
-        } else
-        if (value < node.data) {
+        } else if (value < node.data) {
             if (node.left == null) {
                 node.left = Node(value)
             } else {
@@ -30,35 +31,74 @@ const Tree = (array) => {
             } else {
                 insert(value, node.right);
             }
-        }    
+        }
+        TreeArray.push(value);
+        return true;    
     }
 
-    const remove = (value) => {
+    const remove = (value, inputNode) => {
+        let node = inputNode || TreeRoot;
+        //if node is correct node
+        if (node.data == value) {
+            var temp = TreeArray.filter(elem => elem !== node.data);
+            TreeArray = temp;
+            //if node has no children, set node to null
+            if (node.right == null && node.left == null) return null
+            //if node has only one child, set node to that child
+            else if (node.left == null) {
+                return node.right
+            } else if (node.right == null) {
+                return node.left
+            //if node does have children, rotate tree, keep rotating until you hit no children (recurisve or while?)
+            } else {
+                console.log('rotate the tree')
+                var successorRoot = node
+                var successor = node.right;
+                while (successor.left !== null) {
+                    successorRoot = successor;
+                    successor = successor.left;
+                }
+                if (successorRoot !== node) successorRoot.left = successor.right;
+                else successorRoot.right = successor.right;
 
+                node.data = successor.data;
+
+                return node;
+            }
+        }
+        //if left node is not null, go left
+        if (node.left !== null) {
+            node.left = remove(value, node.left);
+        }
+        //if right null is not null, go right
+        if (node.right !== null) {
+            node.right = remove(value, node.right);
+        }
+        console.log(node)
+        console.log(TreeArray)
+        return node;
     }
 
     const find = (value, inputNode) => {
     //function that finds the given value and returns the node 
-    //NEED TO FIX
         let node = inputNode || TreeRoot;
         let foundNode = {};
         if (node.data == value) {
-            foundNode = node;
             return node;
         } else {
             if (node.left !== null) {
-                node = find(value, node.left);
+                foundNode = find(value, node.left);
             }
-            if (foundNode == {} && node.right !== null) {
-                node = find(value, node.right);
+            if (Object.keys(foundNode).length === 0 && node.right !== null) {
+                foundNode = find(value, node.right);
             }
         }
-        return foundNode;
+        if (Object.keys(foundNode).length === 0) return false;
+        else return foundNode;
     }
 
     const preorder = (inputNode, inputNodes) => {
     //traverses and prints tree in root, left, right order
-    //TD: could probably be optimized
         let node = inputNode || TreeRoot;
         let nodes = inputNodes || [];
         nodes.push(node.data);
@@ -177,26 +217,13 @@ const Node = (value, nodeRight, nodeLeft) => {
     return {data, right, left};
 }
 
+module.exports = Tree;
+
 // let test = [9,5,6,6,99,2,2,9]
-let test = [7,7,4,5,3,6,7,7,1,2]
+let test = [7,7,4,5,3,6,7,7,1,2,8]
+// let test = [7,7,4,32,33,17,7,1,23,54,19,12,84,5,100]
 const myTree = Tree(test);
 
-// console.log(quickSort(test));
-// console.log(removeDupes(test));
-console.log(myTree.root());
-// let rootNode = myTree.root();
-myTree.insert(10);
+console.log(myTree.remove(4))
 myTree.prettyPrint()
-myTree.insert(8);
-myTree.prettyPrint()
-myTree.insert(1);
-myTree.prettyPrint()
-myTree.insert(3);
-myTree.prettyPrint()
-myTree.insert(2);
-myTree.prettyPrint()
-
-// console.log(myTree.preorder())
 // console.log(myTree.inorder())
-// console.log(myTree.postorder())
-// console.log(myTree.find(5))
