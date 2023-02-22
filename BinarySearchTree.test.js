@@ -17,6 +17,10 @@ test('root does not use duplicates to construct tree', () => {
     expect(myTree.preorder().length).toBe(7)
 })
 
+test('levelOrder returns correct array', () => {
+    expect(myTree.levelOrder()).toStrictEqual([4,2,6,1,3,5,7]);
+})
+
 test('preorder returns correct array', () => {
     expect(myTree.preorder()).toStrictEqual([4,2,1,3,6,5,7]);
 })
@@ -59,8 +63,15 @@ test('insert adds elem in the correct location', () => {
     expect(myTree.inorder()).toStrictEqual([1,2,3,4,5,6,7,8,9]);
 })
 
-test('remove removes one element', () => {
+test('remove removes one elem', () => {
     myTree.remove(8)
-    expect(myTree.preorder().length).toBe(7)
+    expect(myTree.preorder().length).toBe(8);
 })
 
+test('remove removes elem in correct location', () => {
+    expect(myTree.inorder()).toStrictEqual([1,2,3,4,5,6,7,9]);
+})
+
+test('height returns correct height', () => {
+    expect(myTree.height()).toBe(3);
+})

@@ -17,7 +17,7 @@ const Tree = (array) => {
     //function that inserts the given value into the tree
         let node = inputNode || TreeRoot;
         if (TreeArray.includes(value)) {
-            console.log("this number is already in the tree")
+            // console.log("this number is already in the tree")
             return false;
         } else if (value < node.data) {
             if (node.left == null) {
@@ -37,7 +37,9 @@ const Tree = (array) => {
     }
 
     const remove = (value, inputNode) => {
+    //removes specified node from tree
         let node = inputNode || TreeRoot;
+        if (!TreeArray.includes(value)) console.log("value is not in tree");
         //if node is correct node
         if (node.data == value) {
             var temp = TreeArray.filter(elem => elem !== node.data);
@@ -51,7 +53,6 @@ const Tree = (array) => {
                 return node.left
             //if node does have children, rotate tree, keep rotating until you hit no children (recurisve or while?)
             } else {
-                console.log('rotate the tree')
                 var successorRoot = node
                 var successor = node.right;
                 while (successor.left !== null) {
@@ -60,9 +61,7 @@ const Tree = (array) => {
                 }
                 if (successorRoot !== node) successorRoot.left = successor.right;
                 else successorRoot.right = successor.right;
-
                 node.data = successor.data;
-
                 return node;
             }
         }
@@ -74,8 +73,6 @@ const Tree = (array) => {
         if (node.right !== null) {
             node.right = remove(value, node.right);
         }
-        console.log(node)
-        console.log(TreeArray)
         return node;
     }
 
@@ -97,8 +94,24 @@ const Tree = (array) => {
         else return foundNode;
     }
 
+    const levelOrder = (queue, inputNodes) => {
+    //traverses tree in level order, returns array
+        let nodes = inputNodes || [];
+        var queue = queue || [TreeRoot];
+        if (queue.length == 0) {
+            return nodes;
+        } else {
+            nodes.push(queue[0].data);
+            if (queue[0].left !== null) queue.push(queue[0].left)
+            if (queue[0].right !== null) queue.push(queue[0].right)
+            queue.shift();
+            levelOrder(queue, nodes)
+        }
+        return nodes;
+    } 
+
     const preorder = (inputNode, inputNodes) => {
-    //traverses and prints tree in root, left, right order
+    //traverses tree in root, left, right order, returns array
         let node = inputNode || TreeRoot;
         let nodes = inputNodes || [];
         nodes.push(node.data);
@@ -112,7 +125,7 @@ const Tree = (array) => {
     }
 
     const inorder = (inputNode, inputNodes) => {
-    //traverses and prints tree in left, root, right order
+    //traverses tree in left, root, right order, returns array
         let node = inputNode || TreeRoot;
         let nodes = inputNodes || [];
         if (node.left !== null) {
@@ -126,7 +139,7 @@ const Tree = (array) => {
     }
 
     const postorder = (inputNode, inputNodes) => {
-        //traverses and prints tree in left, right, root order
+        //traverses tree in left, right, root order, returns array
             let node = inputNode || TreeRoot;
             let nodes = inputNodes || [];
             if (node.left !== null) {
@@ -137,7 +150,35 @@ const Tree = (array) => {
             }
             nodes.push(node.data);
             return nodes;
+    }
+    
+    const height = (inputNode) => {
+    //returns the height of the given node
+        let node = inputNode || TreeRoot;
+        let lheight = 0;
+        let rheight = 0;
+        if (node.left == null && node.right == null) {
+            return Math.max(lheight, rheight);
+        } else {
+            if (node.left !== null) {
+                // console.log("go left")
+                lheight = 1 + height(node.left);
+            }
+            if (node.right !== null) {
+                rheight = 1 + height(node.right);
+            }
         }
+        return Math.max(lheight, rheight);
+    }
+
+
+    const depth = (inputNode) => {
+
+    }
+
+    const isBalanced = (inputNode) => {
+
+    }
 
     const prettyPrint = (inputNode, prefix = '', isLeft = true) => {
     //prints a diagram of the binary tree in the console
@@ -205,7 +246,7 @@ const Tree = (array) => {
         return less.concat(greater);
     }
 
-    return {root, prettyPrint, insert, remove, find, preorder, inorder, postorder}
+    return {root, prettyPrint, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced}
 }
 
 //create Node class
@@ -220,10 +261,14 @@ const Node = (value, nodeRight, nodeLeft) => {
 module.exports = Tree;
 
 // let test = [9,5,6,6,99,2,2,9]
-let test = [7,7,4,5,3,6,7,7,1,2,8]
-// let test = [7,7,4,32,33,17,7,1,23,54,19,12,84,5,100]
+// let test = [7,7,4,5,3,6,7,7,1,2,8]
+let test = [7,7,4,32,33,17,7,1,23,54,19,12,84,5,100]
+// let test = [7,7,4,5,3,6,7,7,1,2]
 const myTree = Tree(test);
+myTree.insert(8)
+// myTree.insert(9)
 
-console.log(myTree.remove(4))
-myTree.prettyPrint()
+
 // console.log(myTree.inorder())
+myTree.prettyPrint()
+console.log(myTree.height())
