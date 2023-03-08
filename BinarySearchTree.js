@@ -1,8 +1,6 @@
 
 //create Tree class
 const Tree = (array) => {
-    // let TreeArray = [];
-    // let TreeRoot = {};
     let TreeArray = quickSort(removeDupes(array));
     let TreeRoot = buildTree(TreeArray);
 
@@ -32,7 +30,7 @@ const Tree = (array) => {
                 insert(value, node.right);
             }
         }
-        TreeArray.push(value);
+        if (!TreeArray.includes(value)) TreeArray.push(value);
         return true;    
     }
 
@@ -139,29 +137,28 @@ const Tree = (array) => {
     }
 
     const postorder = (inputNode, inputNodes) => {
-        //traverses tree in left, right, root order, returns array
-            let node = inputNode || TreeRoot;
-            let nodes = inputNodes || [];
-            if (node.left !== null) {
-                postorder(node.left, nodes);
-            }
-            if (node.right !== null) {
-                postorder(node.right, nodes);
-            }
-            nodes.push(node.data);
-            return nodes;
+    //traverses tree in left, right, root order, returns array
+        let node = inputNode || TreeRoot;
+        let nodes = inputNodes || [];
+        if (node.left !== null) {
+            postorder(node.left, nodes);
+        }
+        if (node.right !== null) {
+            postorder(node.right, nodes);
+        }
+        nodes.push(node.data);
+        return nodes;
     }
     
     const height = (inputNode) => {
-    //returns the height of the given node
+    //returns the height of the given node (longest distance to leaf)
         let node = inputNode || TreeRoot;
         let lheight = 0;
         let rheight = 0;
         if (node.left == null && node.right == null) {
-            return Math.max(lheight, rheight);
+            return 0;
         } else {
             if (node.left !== null) {
-                // console.log("go left")
                 lheight = 1 + height(node.left);
             }
             if (node.right !== null) {
@@ -171,13 +168,39 @@ const Tree = (array) => {
         return Math.max(lheight, rheight);
     }
 
-
-    const depth = (inputNode) => {
+    const depth = (target, inputNode) => {
+    //returns the depth of the given node (distance to root)
+        let node = inputNode || TreeRoot;
+        let lheight = 0;
+        let rheight = 0;
+        if (node == target) {
+            return 0;
+        } else {
+            if (node.left !== null) {
+                lheight = 1 + depth(target, node.left);
+            }
+            if (node.right !== null) {
+                rheight = 1 + depth(target, node.right);
+            }
+        }
+        return Math.min(lheight, rheight);
 
     }
 
-    const isBalanced = (inputNode) => {
+    const isBalanced = () => {
+    //checks if the tree is balanced, returns true if balanced, false if not
+        let lheight = height(TreeRoot.left);
+        let rheight = height(TreeRoot.right);
+        if (Math.abs(lheight - rheight) > 1) return false;
+        else return true;
+    }
 
+    const rebalance = () => {
+    //rebalances tree
+        TreeArray = quickSort(TreeArray);
+        TreeRoot = buildTree(TreeArray);
+        if (TreeRoot !== null) return true;
+        else return false;
     }
 
     const prettyPrint = (inputNode, prefix = '', isLeft = true) => {
@@ -193,7 +216,7 @@ const Tree = (array) => {
     }
 
     function buildTree(array) {
-    //builds tree structure by recursively starting in the middle of the sorted 
+    //internal method to build tree structure by recursively starting in the middle of the sorted 
     //array and setting adjacent elements to the right and left
         let index = Math.floor(array.length/2);
         let node = Node(array[index]);
@@ -211,7 +234,7 @@ const Tree = (array) => {
     }
     
     function removeDupes(array) {
-    //removes duplicates in the array
+    //internal method to removes duplicates in the array
         let temp = [];
         while (array.length > 0) {
             if (temp.includes(array[0])) {
@@ -224,7 +247,7 @@ const Tree = (array) => {
     }
 
     function quickSort(array) {
-    //sorts the array by recursively selecting a random pivot element, 
+    //internal method to sort the array by recursively selecting a random pivot element, 
     //splitting the array into two subarrays of greater and lesser values
     //w.r.t. the pivot, and concatenating the subarrays
         let pivot = array[Math.floor(array.length*Math.random())];
@@ -246,7 +269,7 @@ const Tree = (array) => {
         return less.concat(greater);
     }
 
-    return {root, prettyPrint, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced}
+    return {root, prettyPrint, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, rebalance}
 }
 
 //create Node class
@@ -261,14 +284,18 @@ const Node = (value, nodeRight, nodeLeft) => {
 module.exports = Tree;
 
 // let test = [9,5,6,6,99,2,2,9]
-// let test = [7,7,4,5,3,6,7,7,1,2,8]
-let test = [7,7,4,32,33,17,7,1,23,54,19,12,84,5,100]
+let test = [7,7,4,5,3,6,7,7,1,2]
+// let test = [7,7,4,32,33,17,7,1,23,54,19,12,84,5,100]
 // let test = [7,7,4,5,3,6,7,7,1,2]
 const myTree = Tree(test);
 myTree.insert(8)
-// myTree.insert(9)
+myTree.insert(9)
+
 
 
 // console.log(myTree.inorder())
 myTree.prettyPrint()
-console.log(myTree.height())
+console.log(myTree.isBalanced())
+console.log(myTree.rebalance())
+myTree.prettyPrint()
+console.log(myTree.isBalanced())

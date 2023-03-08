@@ -5,6 +5,15 @@ let array = [7,7,4,5,3,6,7,7,1,2]
 const myTree = Tree(array);
 let rootNode = myTree.root();
 
+//create Node class
+const Node = (value, nodeRight, nodeLeft) => {
+    const data = value || null;
+    const right = nodeRight || null;
+    const left = nodeLeft || null;
+
+    return {data, right, left};
+}
+
 test('root returns object', () => {
     expect(typeof rootNode).toBe('object')
 })
@@ -72,6 +81,43 @@ test('remove removes elem in correct location', () => {
     expect(myTree.inorder()).toStrictEqual([1,2,3,4,5,6,7,9]);
 })
 
-test('height returns correct height', () => {
+test('height returns correct for root', () => {
     expect(myTree.height()).toBe(3);
+})
+
+test('height returns correct for leaf', () => {
+    var node = myTree.find(9);
+    expect(myTree.height(node)).toBe(0);
+})
+
+test('height returns correct for random node', () => {
+    var node = myTree.find(7);
+    expect(myTree.height(node)).toBe(1);
+})
+
+test('depth returns correct for root', () => {
+    expect(myTree.depth(myTree.root())).toBe(0);
+})
+
+test('depth returns correct for leaf', () => {
+    var node = myTree.find(9);
+    expect(myTree.depth(node)).toBe(2);
+})
+
+test('depth returns correct for random node', () => {
+    var node = myTree.find(3);
+    expect(myTree.depth(node)).toBe(2);
+})
+
+test('isBalanced returns bool', () => {
+    expect(typeof myTree.isBalanced()).toBe('boolean');
+})
+
+test('isBalanced returns true for balanced tree', () => {
+    expect(myTree.isBalanced()).toBeTruthy();
+})
+
+test('isBalanced returns false for unbalanced tree', () => {
+    myTree.insert(10);
+    expect(myTree.isBalanced()).toBeFalsy();
 })
