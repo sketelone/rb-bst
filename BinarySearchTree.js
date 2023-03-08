@@ -5,14 +5,13 @@ const Tree = (array) => {
     let TreeRoot = buildTree(TreeArray);
 
     const root = () => {
-    //cleans array and calls buildTree to build array, returns root node
-        // TreeArray = quickSort(removeDupes(array));
-        // TreeRoot = buildTree(TreeArray);
+    //returns root node
         return TreeRoot;
     }
 
     const insert = (value, inputNode) => {
-    //function that inserts the given value into the tree
+    //function that inserts the given value into the tree, returns true if successful,
+    //false if value is already in the tree
         let node = inputNode || TreeRoot;
         if (TreeArray.includes(value)) {
             console.log("this number is already in the tree")
@@ -37,7 +36,10 @@ const Tree = (array) => {
     const remove = (value, inputNode) => {
     //removes specified node from tree
         let node = inputNode || TreeRoot;
-        if (!TreeArray.includes(value)) console.log("value is not in tree");
+        if (!TreeArray.includes(value)) {
+            console.log("value is not in tree");
+            return false;
+        }
         //if node is correct node
         if (node.data == value) {
             var temp = TreeArray.filter(elem => elem !== node.data);
@@ -49,7 +51,7 @@ const Tree = (array) => {
                 return node.right
             } else if (node.right == null) {
                 return node.left
-            //if node does have children, rotate tree, keep rotating until you hit no children (recurisve or while?)
+            //if node does have children, rotate tree, keep rotating until you hit no children
             } else {
                 var successorRoot = node
                 var successor = node.right;
@@ -63,11 +65,9 @@ const Tree = (array) => {
                 return node;
             }
         }
-        //if left node is not null, go left
         if (node.left !== null) {
             node.left = remove(value, node.left);
         }
-        //if right null is not null, go right
         if (node.right !== null) {
             node.right = remove(value, node.right);
         }
@@ -303,3 +303,8 @@ module.exports = Tree;
 // myTree.prettyPrint()
 // console.log(myTree.inorder());
 // console.log(myTree.isBalanced())
+
+let array = [7,7,4,5,3,6,7,7,1,2]
+const myTree = Tree(array);
+let rootNode = myTree.root();
+console.log(myTree.preorder())
