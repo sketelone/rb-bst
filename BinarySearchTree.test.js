@@ -121,3 +121,11 @@ test('isBalanced returns false for unbalanced tree', () => {
     myTree.insert(10);
     expect(myTree.isBalanced()).toBeFalsy();
 })
+
+test('rebalance returns true if successful', () => {
+    expect(myTree.rebalance()).toBeTruthy();
+})
+
+test('rebalance successfully balances tree', () => {
+    expect(myTree.isBalanced()).toBeTruthy();
+})
