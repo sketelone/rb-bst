@@ -34,7 +34,8 @@ const Tree = (array) => {
     }
 
     const remove = (value, inputNode) => {
-    //removes specified node from tree
+    //removes specified node from tree, returns node if node is removed, 
+    //or false if node is not in tree
         let node = inputNode || TreeRoot;
         if (!TreeArray.includes(value)) {
             console.log("value is not in tree");
@@ -199,8 +200,7 @@ const Tree = (array) => {
     //rebalances tree
         TreeArray = quickSort(TreeArray);
         TreeRoot = buildTree(TreeArray);
-        if (TreeRoot !== null) return true;
-        else return false;
+        return true;
     }
 
     const prettyPrint = (inputNode, prefix = '', isLeft = true) => {
@@ -303,8 +303,3 @@ module.exports = Tree;
 // myTree.prettyPrint()
 // console.log(myTree.inorder());
 // console.log(myTree.isBalanced())
-
-let array = [7,7,4,5,3,6,7,7,1,2]
-const myTree = Tree(array);
-let rootNode = myTree.root();
-console.log(myTree.preorder())

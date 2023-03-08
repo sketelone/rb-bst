@@ -8,16 +8,13 @@ Binary search trees are tree data structures comprised of nodes, each of which h
 root() - function which returns the root node <br />
 insert(value) - inserts a new node with the given value <br />
 remove(value) - removes a new node with the given value <br />
-find(value) - finds the value <br />
-levelOrder() - returns the last node in the list <br />
-preorder(index) - returns the node at the given index or false if index exceeds length of list <br />
-inorder() - removes the last element from the list <br />
-postorder(value) - returns true if the passed in value is in the list and otherwise returns false <br />
-height(node) - returns the index of the node containing value, or false if not found <br />
-depth(node) - returns linked list as a string in the format: ( value ) -> ( value ) -> ( value ) -> null <br />
-isBalanced() - inserts a new node with the provided value at the given index or false if index exceeds length of list <br />
-rebalance() - inserts a new node with the provided value at the given index or false if index exceeds length of list <br />
-prettyPrint(index) - removes the node at the given index or false if the list is empty or if index exceeds length of list <br />
-
-
-root, prettyPrint, insert, remove, find, levelOrder, preorder, inorder, postorder, height, depth, isBalanced, rebalance
+find(value) - finds the value and returns the node <br />
+levelOrder() - traverses tree in level order (visit all nodes on a given level before descending), returns array of values <br />
+preorder() - traverses tree in level order (Root, Left, Right), returns array of values <br />
+inorder() - traverses tree in level order (Left, Root, Right), returns array of values <br />
+postorder() - traverses tree in level order (Left, Right, Root), returns array of values <br />
+height(node) - returns height (longest distance to leaf) of the given node, or root if no input is given <br />
+depth(node) - returns depth (distance to root) of the given node, or root if no input is given <br />
+isBalanced() - checks if the tree is balanced <br />
+rebalance() - rebalances the tree <br />
+prettyPrint() - prints a diagram of the binary tree in the console <br />
