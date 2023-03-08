@@ -15,7 +15,7 @@ const Tree = (array) => {
     //function that inserts the given value into the tree
         let node = inputNode || TreeRoot;
         if (TreeArray.includes(value)) {
-            // console.log("this number is already in the tree")
+            console.log("this number is already in the tree")
             return false;
         } else if (value < node.data) {
             if (node.left == null) {
