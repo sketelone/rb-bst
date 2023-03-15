@@ -1,4 +1,4 @@
-const Tree = require('./BinarySearchTree.js')
+const Tree = require('./RedBlackBinarySearchTree.js')
 
 //initialize binary search tree
 let array = [7,7,4,5,3,6,7,7,1,2]

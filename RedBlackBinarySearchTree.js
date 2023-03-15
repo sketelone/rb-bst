@@ -283,23 +283,16 @@ const Node = (value, nodeRight, nodeLeft) => {
 
 module.exports = Tree;
 
-// function createRandomArray (n) {
-// //function which creates a random array of length n with numbers from 1 to 1000
-//     return Array.from({length:40}, () => Math.floor(Math.random()*1000))
-// }
-// let test = createRandomArray(20);
-// const myTree = Tree(test);
-// myTree.prettyPrint();
-// console.log(myTree.inorder());
-// console.log(myTree.isBalanced());
-// let newNums = createRandomArray(7);
-// newNums.forEach(num => {
-//     myTree.insert(num);
-// })
-// myTree.prettyPrint();
-// console.log(myTree.inorder());
-// console.log(myTree.isBalanced());
-// console.log(myTree.rebalance());
-// myTree.prettyPrint()
-// console.log(myTree.inorder());
-// console.log(myTree.isBalanced())
+function createRandomArray (n) {
+//function which creates a random array of length n with numbers from 1 to 1000
+    return Array.from({length:n}, () => Math.floor(Math.random()*1000))
+}
+
+let test = createRandomArray(8);
+const myTree = Tree(test);
+myTree.prettyPrint();
+
+let newNums = createRandomArray(3);
+newNums.forEach(num => {
+    myTree.insert(num);
+})
